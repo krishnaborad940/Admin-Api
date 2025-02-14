@@ -1,5 +1,5 @@
 const passport = require('passport')
-const passprt=require('passport')
+
 const Admin = require('../Models/AdminModel')
 
 const jwtStratergy=require('passport-jwt').Strategy
@@ -19,6 +19,26 @@ passport.use(new jwtStratergy(opts,async(payload,done)=>{
         return done(null,false)
     }
 }))
+
+
+// faculty
+const Faculty = require('../Models/FacultyModel')
+
+const facultyOpts={
+    jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey:'FRNW'
+}
+
+passport.use('faculty',new jwtStratergy(facultyOpts,async(payload,done)=>{
+    let checkfacultyEmail=await Faculty.findOne({email:payload.ft.email}) 
+    if(checkfacultyEmail){
+        return done(null,checkfacultyEmail)
+    }else{
+        return done(null,false)
+    }
+}))
+
+
 
 passport.serializeUser((user,done)=>{
     return done(null,user.id)

@@ -30,6 +30,8 @@ app.use(passport.session())
 
 
 app.use('/api',require('./Routes/Api/V1/Admin'))
+app.use('/api/faculty',require('./Routes/Api/V1/Faculty Routes'))
+
 
 app.listen(port,(err)=>{
     if(err){

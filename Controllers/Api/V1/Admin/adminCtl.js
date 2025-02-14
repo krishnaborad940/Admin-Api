@@ -4,7 +4,6 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 const nodemailer=require('nodemailer')
-const Faculty = require("../../../../Models/FacultyModel")
 module.exports.adminRegister=async(req,res)=>{
     try{
             let checkEmail=await Admin.findOne({email:req.body.email})
@@ -202,7 +201,7 @@ module.exports.updatePassword=async(req,res)=>{
 
     }
 }
-
+// Faculty
 module.exports.facultyRegister=async(req,res)=>{
     try{
         // console.log(req.body)
@@ -233,7 +232,8 @@ module.exports.facultyRegister=async(req,res)=>{
                 });
 
                 if(info){
-                        let addFaculty=await Faculty.create({email:req.body.email,password:Gpass,username:req.body.username})
+                    let encryptedPassword=await bcrypt.hash(Gpass,10)
+                        let addFaculty=await Faculty.create({email:req.body.email,password:encryptedPassword,username:req.body.username})
                         if(addFaculty){
                             return res.status(200).json({'msg':'Faculty register successfully',data:addFaculty})
                         }
