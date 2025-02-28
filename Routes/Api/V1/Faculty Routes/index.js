@@ -30,5 +30,12 @@ routes.post('/updatePassword',passport.authenticate('faculty',{failureRedirect:'
 
 routes.post('/logout',passport.authenticate('faculty',{failureRedirect:'/api/faculty/failerfaculty'}),facultyctl.logout)
 
+routes.post("/studentRegister",facultyctl.studentRegister)
+routes.post('/multipledelete',passport.authenticate('faculty',{failureRedirect:'/api/faculty/failerfaculty'}),facultyctl.multipledelete);
+
+
+routes.get("/viewAllStudent",facultyctl.viewAllStudent)
+routes.get('/statuschange',passport.authenticate('faculty',{failureRedirect:'/api/faculty/failerfaculty'}),facultyctl.statuschange);
+
 
 module.exports=routes;

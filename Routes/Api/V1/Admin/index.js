@@ -32,6 +32,18 @@ routes.post('/updatePassword',adminCtl.updatePassword)
 
 routes.post('/facultyRegister',adminCtl.facultyRegister)
 
+routes.get('/viewAllFaculty',adminCtl.viewAllFaculty)
+routes.get('/viewAllStudent',adminCtl.viewAllStudent)
+
+
+routes.post('/multipledelete',passport.authenticate('jwt',{failureRedirect:'/api/adminFailerLogin'}),adminCtl.multipledelete);
+
+routes.get('/statuschangefaculty',passport.authenticate('jwt',{failureRedirect:'/api/adminFailerLogin'}),adminCtl.statuschangefaculty);
+
+routes.get('/statuschange',passport.authenticate('jwt',{failureRedirect:'/api/adminFailerLogin'}),adminCtl.statuschange);
+
+
+
 
 // console.log("connected")
 module.exports=routes;

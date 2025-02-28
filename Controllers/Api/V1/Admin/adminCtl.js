@@ -4,6 +4,7 @@ const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
 
 const nodemailer=require('nodemailer')
+const Faculty = require("../../../../Models/FacultyModel")
 module.exports.adminRegister=async(req,res)=>{
     try{
             let checkEmail=await Admin.findOne({email:req.body.email})
@@ -205,7 +206,7 @@ module.exports.updatePassword=async(req,res)=>{
 module.exports.facultyRegister=async(req,res)=>{
     try{
         // console.log(req.body)
-         let checkEmail=await Admin.findOne({email:req.query.email})
+         let checkEmail=await Faculty.findOne({email:req.query.email})
          if(!checkEmail){
             let Gpass=generatePassword();
                 // console.log(Gpass)
@@ -264,3 +265,113 @@ function generatePassword() {
     }
     return retVal;
 }
+module.exports.viewAllFaculty=async(req,res)=>{
+    try{
+        let findall=await Faculty.find()
+        if(findall){
+        return res.status(200).json({msg:"all faculty data",data:findall})
+
+        }else{
+        return res.status(200).json({msg:"not data "})
+
+        }
+    }
+    catch(err){
+        return res.status(400).json({msg:"somthing went wrong"})
+    }
+}
+
+module.exports.viewAllStudent=async(req,res)=>{
+    try{
+        let findall=await Student.find()
+        if(findall){
+        return res.status(200).json({msg:"all faculty data",data:findall})
+
+        }else{
+        return res.status(200).json({msg:"not data "})
+
+        }
+    }
+    catch(err){
+        return res.status(400).json({msg:"somthing went wrong"})
+    }
+}
+
+
+module.exports.statuschange=async(req,res)=>{
+    try{
+        let checkuser=await Admin.findById(req.query.userid);
+        if(checkuser){
+            if(req.query.userstatus == "true"){
+                let checkstatus=await User.findByIdAndUpdate(req.query.userid,{status:false});
+                if(checkstatus){
+                    return res.status(200).json({'msg':"status dactive update",data:checkstatus});
+                }
+                else{
+                    return res.status(400).json({'msg':"data not update",error:err});
+                }
+            }   
+            else{
+                if(req.query.userstatus){
+                    let checkstatus=await Admin.findByIdAndUpdate(req.query.userid,{status:true});
+                    if(checkstatus){
+                        return res.status(200).json({'msg':"status active update",data:checkstatus});
+                    }
+                    else{
+                        return res.status(400).json({'msg':"data not update",error:err});
+                    }
+                }
+            }
+        }
+    }
+    catch(err){
+        return res.status(400).json({'msg':"something is wrong",error:err});
+    }
+}
+
+module.exports.multipledelete = async (req, res) => {
+    try {
+        let deletedata=await Admin.deleteMany({_id:{$in:req.body.ids}});
+        if(deletedata){
+            return res.status(200).json({'msg':"data deleted successfully",data:deletedata});
+        }
+        else{
+            return res.status(400).json({'msg':"data not delete",error:err});
+        }
+    } catch (err) {
+        return res.status(400).json({ msg: "Something went wrong", error: err.message });
+    }
+};
+
+
+module.exports.statuschangefaculty=async(req,res)=>{
+    try{
+        let checkuser=await Faculty.findById(req.query.userid);
+        if(checkuser){
+            if(req.query.status == "true"){
+                let checkstatus=await Faculty.findByIdAndUpdate(req.query.userid,{status:false});
+                if(checkstatus){
+                    return res.status(200).json({'msg':"status dactive update",data:checkstatus});
+                }
+                else{
+                    return res.status(400).json({'msg':"data not update",error:err});
+                }
+            }   
+            else{
+                if(req.query.status){
+                    let checkstatus=await Faculty.findByIdAndUpdate(req.query.userid,{status:true});
+                    if(checkstatus){
+                        return res.status(200).json({'msg':"status active update",data:checkstatus});
+                    }
+                    else{
+                        return res.status(400).json({'msg':"data not update",error:err});
+                    }
+                }
+            }
+        }
+    }
+    catch(err){
+        return res.status(400).json({'msg':"something is wrong",error:err});
+    }
+}
+
